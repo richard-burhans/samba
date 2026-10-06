@@ -482,6 +482,17 @@ static NTSTATUS set_remote_addresses(struct dcesrv_connection *conn,
 		DBG_ERR("getpeername failed: %s\n", nt_errstr(status));
 		return status;
 	}
+	if (ssa.sa_socklen == 0) {
+		/*
+		 * sock is one end of a socketpair(). On illumos and
+		 * Solaris getpeername() reports the unnamed peer with
+		 * a zero length address, which
+		 * tsocket_address_bsd_from_sockaddr() rejects. Treat
+		 * it as the unnamed AF_UNIX address Linux returns.
+		 */
+		ssa.u.sa.sa_family = AF_UNIX;
+		ssa.sa_socklen = sizeof(ssa.u.sa.sa_family);
+	}
 
 	ret = tsocket_address_bsd_from_sockaddr(conn,
 						&ssa.u.sa,
