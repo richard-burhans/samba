@@ -11,7 +11,7 @@ release tarball (`nsswitch/wb_common.c`, `winbind_nss_linux.c`,
 `winbind_nss_solaris.c`) with a minimal stand-in for `lib/replace`,
 using the same feature defines Samba's configure sets on illumos.
 
-    ./nss32.sh build        # download, verify, compile
+    ./nss32.sh build        # compile (offline; sources from nss32.tar.gz)
     ./nss32.sh test [user]  # try it without installing
     ./nss32.sh install      # repoint nss_winbind.so.1, restart nscd/mapid
     ./nss32.sh rollback     # restore the previous module
